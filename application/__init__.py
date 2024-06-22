@@ -14,7 +14,7 @@ import os
 
 #load data
 #dataLoc ="./Sample_Data/Raw/WA_Fn-UseC_-Telco-Customer-Churn.csv"
-dataLoc ="./churnData/processed_dataset5.csv"
+dataLoc ="./churnData/processed_dataset_subset.csv"
 df4 = pd.read_csv(dataLoc,sep = ',')
 
 # Split the data into features and target variable
@@ -66,14 +66,8 @@ scaler = joblib.load('scaler.pkl')
 def predict():
     #get data from request
     data = request.get_json(force=True)
-    data_point = np.array([data["gender"], data["SeniorCitizen"], data["Partner"], \
-        data["Dependents"], data["tenure"], data["PhoneService"], data["MultipleLines"], \
-        data["InternetService"], data["OnlineSecurity"], data["OnlineBackup"], data["tenure"], \
-        data["DeviceProtection"], data["TechSupport"], data["StreamingTV"],data["StreamingMovies"], \
-        data["Contract"], data["PaperlessBilling"], data["PaymentMethod"],data["MonthlyCharges"],data["TotalCharges"]])
-    #data_point.TotalCharges = pd.to_numeric(data_point.TotalCharges, errors='coerce')
-    data_final = pd.get_dummies(data_point, drop_first=True)
-    data_scale = scaler.transform(data_final)
+    data_point = np.array([data["SeniorCitizen"], data["tenure"],data["gender_Male"], data["Dependents_Yes"]])
+    data_scale = scaler.transform(data_point)
     #make predicon using model
     prediction = model.predict(data_scale)
     return Response(json.dumps(prediction[0]))
