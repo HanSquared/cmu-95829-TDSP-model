@@ -71,7 +71,7 @@ def predict():
         data["InternetService"], data["OnlineSecurity"], data["OnlineBackup"], data["tenure"], \
         data["DeviceProtection"], data["TechSupport"], data["StreamingTV"],data["StreamingMovies"], \
         data["Contract"], data["PaperlessBilling"], data["PaymentMethod"],data["MonthlyCharges"],data["TotalCharges"]])
-    data_point.TotalCharges = pd.to_numeric(data_point.TotalCharges, errors='coerce')
+    #data_point.TotalCharges = pd.to_numeric(data_point.TotalCharges, errors='coerce')
     data_final = pd.get_dummies(data_point, drop_first=True)
     data_scale = scaler.transform(data_final)
     #make predicon using model
