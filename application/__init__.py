@@ -25,9 +25,9 @@ Y = df4['Churn']
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=100)
 
 # Standardize the features
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
+#scaler = StandardScaler()
+#X_train = scaler.fit_transform(X_train)
+#X_test = scaler.transform(X_test)
 
 # Train a logistic regression model
 #model = LogisticRegression()
@@ -47,7 +47,6 @@ accuracy = accuracy_score(Y_test, Y_pred)
 
 # Save the model and scaler to disk
 joblib.dump(rf_classifier, 'churn_model.pkl')
-joblib.dump(scaler, 'scaler.pkl')
 
 #create flask instance
 from flask import Flask
@@ -56,7 +55,6 @@ app = Flask(__name__)
 
 # Load the trained model and scaler
 model = joblib.load('churn_model.pkl')
-scaler = joblib.load('scaler.pkl')
 
 
 #==========================
@@ -67,7 +65,6 @@ def predict():
     #get data from request
     data = request.get_json(force=True)
     data_point = np.array([data["SeniorCitizen"], data["tenure"],data["gender_Male"], data["Dependents_Yes"]])
-    data_scale = scaler.transform(data_point)
     #make predicon using model
-    prediction = model.predict(data_scale)
+    prediction = model.predict(data_point)
     return Response(json.dumps(prediction[0]))
