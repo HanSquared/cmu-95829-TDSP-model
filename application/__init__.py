@@ -64,7 +64,20 @@ model = joblib.load('churn_model.pkl')
 def predict():
     #get data from request
     data = request.get_json(force=True)
-    data_point = np.array([data["SeniorCitizen"], data["tenure"],data["gender_Male"], data["Dependents_Yes"]])
+
+    data_Senior = np.array([data["SeniorCitizen"]])
+    data_Senior = np.reshape(data_Senior, (1, -1))
+
+    data_tenure = np.array([data["tenure"]])
+    data_tenure = np.reshape(data_tenure, (1, -1))
+
+    data_gender = np.array([data["gender_Male"]])
+    data_gender = np.reshape(data_gender, (1, -1))
+
+    data_dependents = np.array([data["Dependents_Yes"]])
+    data_dependents = np.reshape(data_dependents, (1, -1))
+
+    data_final = np.column_stack((data_Senior, data_tenure, data_gender,data_dependents))
     #make predicon using model
-    prediction = model.predict(data_point)
-    return Response(json.dumps(prediction[0]))
+    prediction = model.predict(data_final)
+    return Response(json.dumps(prediction[0],default=str))
